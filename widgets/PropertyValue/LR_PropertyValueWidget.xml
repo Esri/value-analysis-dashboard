@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ | Version 10.1.1
+ | Copyright 2012 Esri
+ |
+ | Licensed under the Apache License, Version 2.0 (the "License");
+ | you may not use this file except in compliance with the License.
+ | You may obtain a copy of the License at
+ |
+ |    http://www.apache.org/licenses/LICENSE-2.0
+ |
+ | Unless required by applicable law or agreed to in writing, software
+ | distributed under the License is distributed on an "AS IS" BASIS,
+ | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ | See the License for the specific language governing permissions and
+ | limitations under the License.
+-->
+<!-- Field formatting for numbers
+<field> terms may have an optional "format" attribute that specifies how they are to be displayed;
+this only works for numeric fields.
+
+If this format field contains a "$" symbol, it is formatted as currency; otherwise, it is formatted
+as a number. If the field contains a "%" symbol, the value is multiplied by 100 before formatting
+and a "%" symbol is appended to it.
+
+If this format field contains a "," symbol, it is grouped into thousands using a comma.
+
+If this format field contains a "." symbol, all of the characters from the period to the end
+of the format field are treated as a precision number, i.e., the number of places to show after
+the decimal point. If the format field ends with ".0", e.g., no decimal places or point are shown.
+If the field ends with ".2", on the other hand, two decimal places are shown after a decimal point.
+-->
+<configuration>
+    <info>widgets/PropertyValue/InfoColumnChartWidget.swf</info>
+    <!-- Define a set of queries on a MapServer layer (e.g.,
+         .../ArcGIS/rest/services/AssessmentOperations/MapServer); labelref is the label
+         of that layer in the main config file -->
+    <theme labelref="Property Value" >
+        <!-- Define a query on a MapServer feature layer (e.g.,
+             .../ArcGIS/rest/services/AssessmentOperations/MapServer/3) and specify the
+             fields to display from that layer -->
+       <query layer="3" minscale="82000" maxscale="0" legendurl="widgets/PropertyValue/assets/images/Legend_unemp.png" >
+            <listfields>
+                <field name="PARCELID" alias="Parcel ID" />
+                <field name="NGHBRHDCD" alias="Neighborhood" />
+                <field name="STRCLASS" alias="Structure Class" />
+                <field name="CNTASSDVAL" alias="Current Assessed Value" format="$,.0" />
+                <field name="PRVASSDVAL" alias="Previous Assessed Value" format="$,.0" />
+                <field name="ASSDPCNTCG" alias="Assessed Value Change" format="%.0" />
+            </listfields>
+           <columnchartfields>
+               <field name="CNTASSDVAL" alias="Current Yr" />
+               <field name="PRVASSDVAL" alias="Previous Yr" />
+           </columnchartfields>
+       </query>
+    </theme>
+</configuration>

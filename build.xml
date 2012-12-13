@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ | Version 10.1.1
+ | Copyright 2012 Esri
+ |
+ | Licensed under the Apache License, Version 2.0 (the "License");
+ | you may not use this file except in compliance with the License.
+ | You may obtain a copy of the License at
+ |
+ |    http://www.apache.org/licenses/LICENSE-2.0
+ |
+ | Unless required by applicable law or agreed to in writing, software
+ | distributed under the License is distributed on an "AS IS" BASIS,
+ | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ | See the License for the specific language governing permissions and
+ | limitations under the License.
+-->
+<project name="Flash" default="build" basedir=".">
+    <property name="flexviewer" value="__arcgis-viewer-flex-flexviewer-3.0-src" />
+    <property name="widgets" value="widgets" />
+    <property name="distrib" value="__distrib" />
+
+    <target name="build">
+        <echo message="Building ${flexviewer}" />
+
+        <!-- Create the build project and the results directory -->
+        <delete dir="${flexviewer}" />
+        <sleep seconds="2" />
+        <unzip src="${flexviewer}.zip" dest="./" />
+
+        <delete dir="${distrib}" />
+        <mkdir dir="${distrib}"/>
+
+        <!-- Insert widget sources -->
+        <antcall target="-addWidgetSource"><param name="widget" value="MultilayerIdentify" /></antcall>
+        <antcall target="-addWidgetSource"><param name="widget" value="PropertyValue" /></antcall>
+        <antcall target="-registerAdditionalWidgetSource">
+            <param name="widget" value="PropertyValue" />
+            <param name="addon" value="InfoColumnChart" />
+        </antcall>
+
+        <!-- Insert customizations -->
+        <copy todir="${flexviewer}\libs" overwrite="true">
+            <fileset dir="libs" />
+        </copy>
+
+        <copy todir="${flexviewer}\src" overwrite="true">
+            <fileset dir="config" />
+        </copy>
+
+        <copy todir="${flexviewer}\src\assets" overwrite="true">
+            <fileset dir="assets" />
+        </copy>
+        <copy todir="${flexviewer}\src\com" overwrite="true">
+            <fileset dir="com" />
+        </copy>
+        <copy todir="${flexviewer}\src\org" overwrite="true">
+            <fileset dir="org" />
+        </copy>
+        <copy todir="${flexviewer}\src\popups" overwrite="true">
+            <fileset dir="popups" />
+        </copy>
+        <copy todir="${flexviewer}\src\widgets" overwrite="true">
+            <fileset dir="widgetConfigsOnly" />
+        </copy>
+
+        <!-- Build widgets -->
+        <exec executable="cmd" failonerror="true">
+            <arg value="/c"/>
+            <arg value="flexbuild.bat"/>
+        </exec>
+
+        <!-- Retrieve results -->
+        <antcall target="-getWidgetResults"><param name="widget" value="MultilayerIdentify" /></antcall>
+        <antcall target="-getWidgetResults"><param name="widget" value="PropertyValue" /></antcall>
+    </target>
+
+    <target name="-addWidgetSource">
+        <copy todir="${flexviewer}\src\widgets\${widget}" overwrite="true">
+            <fileset dir="${widgets}\${widget}" />
+        </copy>
+        <replace file="${flexviewer}\.actionScriptProperties">
+            <replacetoken><![CDATA[</modules>]]></replacetoken>
+            <replacevalue><![CDATA[  <module application="src/index.mxml" destPath="widgets/@@@/@@@Widget.swf" optimize="true" sourcePath="src/widgets/@@@/@@@Widget.mxml"/>
+  </modules>]]></replacevalue>
+        </replace>
+        <replace file="${flexviewer}\.actionScriptProperties" token="@@@" value="${widget}" />
+    </target>
+
+    <target name="-registerAdditionalWidgetSource">
+        <replace file="${flexviewer}\.actionScriptProperties">
+            <replacetoken><![CDATA[</modules>]]></replacetoken>
+            <replacevalue><![CDATA[  <module application="src/index.mxml" destPath="widgets/@@@/???Widget.swf" optimize="true" sourcePath="src/widgets/@@@/???Widget.mxml"/>
+  </modules>]]></replacevalue>
+        </replace>
+        <replace file="${flexviewer}\.actionScriptProperties" token="@@@" value="${widget}" />
+        <replace file="${flexviewer}\.actionScriptProperties" token="???" value="${addon}" />
+    </target>
+
+    <target name="-getWidgetResults">
+        <copy todir="${distrib}\${widget}" overwrite="true">
+            <fileset dir="${flexviewer}\bin-release\widgets\${widget}" />
+        </copy>
+    </target>
+</project>

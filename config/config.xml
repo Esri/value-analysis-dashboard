@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ | Version 10.1.1
+ | Copyright 2012 Esri
+ |
+ | Licensed under the Apache License, Version 2.0 (the "License");
+ | you may not use this file except in compliance with the License.
+ | You may obtain a copy of the License at
+ |
+ |    http://www.apache.org/licenses/LICENSE-2.0
+ |
+ | Unless required by applicable law or agreed to in writing, software
+ | distributed under the License is distributed on an "AS IS" BASIS,
+ | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ | See the License for the specific language governing permissions and
+ | limitations under the License.
+-->
+<!--
+////////////////////////////////////////////////////////////////////////////////
+//
+// Read more about ArcGIS Viewer for Flex - http://links.esri.com/flexviewer
+//
+////////////////////////////////////////////////////////////////////////////////
+-->
+<configuration>
+    <title>Value Analysis Dashboard</title>
+    <subtitle>for Assessment and Taxation Agencies</subtitle>
+    <logo>assets/images/i_home.png</logo>
+    <style>
+        <colors>0xFFFFFF,0x333333,0x101010,0x000000,0xFFFFFF</colors>
+        <alpha>0.8</alpha>
+    </style>
+    <!-- replace the following url with your own geometryservice -->
+    <geometryservice url="http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer" />
+
+    <!-- UI elements -->
+    <splashpage label="ArcGIS Viewer for Flex" config="widgets/Splash/LR_SplashWidget.xml" url="widgets/Splash/SplashWidget.swf"/>
+    <widget left="10"  top="50"    config="widgets/Navigation/LR_NavigationWidget.xml" url="widgets/Navigation/NavigationWidget.swf"/>
+    <widget right="20" top="55"    config="widgets/MapSwitcher/LR_MapSwitcherWidget.xml" url="widgets/MapSwitcher/MapSwitcherWidget.swf"/>
+    <widget left="0"   top="0"     config="widgets/HeaderController/LR_HeaderControllerWidget.xml" url="widgets/HeaderController/HeaderControllerWidget.swf"/>
+    <widget left="3" bottom="3" config="widgets/Coordinate/CoordinateWidget.xml" url="widgets/Coordinate/CoordinateWidget.swf"/>
+
+    <map wraparound180="true" initialextent="-9273520 5249870 -9270620 5251510" fullextent="-9273520 5249870 -9270620 5251510" top="40" addarcgisbasemaps="false">
+      <basemaps>
+          <layer label="Imagery" type="tiled" visible="False"  alpha="1"
+                 url="http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer"/>
+          <layer label="Imagery" type="feature" visible="false" alpha="1"
+                 url="http://localgovtemplates.esri.com/ArcGIS/rest/services/AssessmentOperations/MapServer/3"/>
+          <layer label="Parcel" type="tiled" visible="true"  alpha="1"
+                 url="http://localgovtemplates.esri.com/ArcGIS/rest/services/ParcelPublicAccessforBloomfield/MapServer"/>
+          <layer label="Tax Map"  type="tiled" visible="false" alpha="1"
+                 url="http://localgovtemplates.esri.com/ArcGIS/rest/services/ParcelIndustry/MapServer"/>
+      </basemaps>
+      <operationallayers>
+        <layer label="Property Value" type="dynamic" visible="true" alpha="0"
+                url="http://localgovtemplates.esri.com/ArcGIS/rest/services/AssessmentOperations/MapServer"/>
+        <layer label="Neighborhoods" type="feature" visible="false" alpha=".5"
+                url="http://localgovtemplates.esri.com/ArcGIS/rest/services/AssessmentOperations/MapServer/4"/>
+        <layer label="Assessment Appeals" type="feature" visible="false" alpha="1"
+                url="http://localgovtemplates.esri.com/ArcGIS/rest/services/AssessmentOperations/MapServer/2"/>
+        <layer label="Sales" type="feature" visible="true" alpha="1"
+                url="http://localgovtemplates.esri.com/ArcGIS/rest/services/AssessmentOperations/MapServer/1"/>
+        <layer label="Foreclosures" type="feature" visible="false" alpha="1"
+                url="http://localgovtemplates.esri.com/ArcGIS/rest/services/AssessmentOperations/MapServer/0"/>
+        <layer label="Parcel Characteristics" type="feature" visible="true" alpha="0"
+                url="http://localgovtemplates.esri.com/ArcGIS/rest/services/AssessmentOperations/MapServer/3"/>
+        <layer label="Feedback" type="feature" visible="true" alpha="0"
+                url="http://localgovtemplates.esri.com/ArcGIS/rest/services/ParcelMarkups/FeatureServer/0"/>
+      </operationallayers>
+    </map>
+
+    <!-- widgets organized into widget containers that manage close/open etc -->
+    <!-- supported layout property options: horizontal(default)|float|vertical|fix-->
+    <widgetcontainer layout="float">
+      <widget label="Property Value"
+              right="20" bottom="10"
+              preload="closed"
+              icon="widgets/PropertyValue/assets/images/LR_housevalue.png"
+              config="widgets/PropertyValue/LR_PropertyValueWidget.xml"
+              url="widgets/PropertyValue/PropertyValueWidget.swf"/>
+      <widget label="Property Characteristics"
+              preload="open"
+              right="20" top="275"
+              icon="assets/images/i_about.png"
+              config="widgets/MultilayerIdentify/LR_MultilayerIdentifyWidget.xml"
+              url="widgets/MultilayerIdentify/MultilayerIdentifyWidget.swf"/>
+      <widget label="Property Transactions by Time"
+              right="20" top="490"
+              icon="assets/images/i_clock.png"
+              config="widgets/Time/LR_TimeWidget.xml"
+              url="widgets/Time/TimeWidget.swf" />
+      <widget label="Edit"
+              icon="assets/images/i_edit.png"
+              config="widgets/Edit/LR_EditWidget.xml"
+              url="widgets/Edit/EditWidget.swf"/>
+      <widget label="Bookmarks"
+              left="58" top="485"
+              icon="assets/images/i_bookmark.png"
+              config="widgets/Bookmark/LR_BookmarkWidget.xml"
+              url="widgets/Bookmark/BookmarkWidget.swf"/>
+      <widget label="Legend"
+              left="378" top="485"
+              config="widgets/Legend/LegendWidget.xml"
+              icon="assets/images/Legend32.png"
+              url="widgets/Legend/LegendWidget.swf" />
+      <widget label="Print"
+              left="58" top="300"
+              icon="assets/images/i_print.png"
+              config="widgets/Print/PrintWidget.xml"
+              url="widgets/Print/PrintWidget.swf"/>
+
+
+    </widgetcontainer>
+
+</configuration>

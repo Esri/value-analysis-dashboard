@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+ | Version 10.1.1
+ | Copyright 2010 Esri
+ |
+ | Licensed under the Apache License, Version 2.0 (the "License");
+ | you may not use this file except in compliance with the License.
+ | You may obtain a copy of the License at
+ |
+ |    http://www.apache.org/licenses/LICENSE-2.0
+ |
+ | Unless required by applicable law or agreed to in writing, software
+ | distributed under the License is distributed on an "AS IS" BASIS,
+ | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ | See the License for the specific language governing permissions and
+ | limitations under the License.
+-->
+<!--
+The <argis-viewer-note> sections are just so that a comment can be seen in the ArcGIS for Flex
+Application Builder's configuration display referring the configurer to this file.
+
+<identifytolerance> indicates the radius in pixels of the buffer to create around a click
+point; without this, point features are nearly impossible to select.
+
+<introduction>, <countdown>, <nofeatures>, and <attachmentsTitle> are text strings that
+appear in the popup.
+
+<validDomainList> is a comma-separated list of domains from which the widget may get
+attachments. If the URL to an attachment is in this list, the attachment's caption is
+a link to the attachment. Otherwise, the caption is simple text to avoid opening a
+security hole. (Images are always retrieved, however.) The domain from which the widget's
+app is run is always valid and does not need to be included in the parameter's list.
+
+The <layers> section contains a <layer> tag for each layer to be identifiable. The <layer> tag
+has the attributes "label" to match with the layer's label in the config.xml file and "type"
+to match the layer's type (dynamic or feature).  Dynamic layers have <sublayer> subtags to
+indicate which of its layers are identifiable; these <sublayer> tags have the attribute "id"
+to indicate the sublayer's id number.
+
+Within the <layer> tag for feature layers or the <sublayer> tag for the sublayers of a dynamic
+layer, one can put the optional display tags <caption>, <format>, and <relationship>.
+
+If the <caption> tag is supplied, its text is used as the title of the box displaying the
+items found for the layer. If omitted, the layer's name is used.
+
+If the <format> tag is supplied, its text is used as a format specification string for
+displaying the attributes for each item found for the layer. If omitted, name-value pairs are
+used for all attributes except the OBJECTID attribute. The contents of the format string are
+described below.
+
+If the <relationship> tag is supplied for a layer, related items (attachments and tables,
+e.g.) are sought for the found features for that layer.  These related items are displayed
+according to the <caption> and <format> tags that appear within the <relationship> tag.
+
+The <format> tag contains a specification string encased within the "<![CDATA[" prefix and
+"]]>" suffix.  Between these two 'fixes, one can place arbitrary text and some HTML tags
+such as <b>, <u>, <br>, and <a>; see the documentation for ActionScript's TextConverter's
+TEXT_FIELD_HTML_FORMAT constant for the full list
+(http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flashx/textLayout/conversion/TextConverter.html#TEXT_FIELD_HTML_FORMAT )
+
+In addition to the arbitrary text and HTML tags, one can place fields for inserting
+attribute names and values.  These fields are surrounded by braces ("{}") and begin with the
+name of the attribute followed by a tilde ("~"). After the tilde, one places the keyword
+"label", "value", "number", "currency", "phone", or "date".
+
+The "label" and "value" keywords are complete: "label" will replace the whole brace field
+with the name or alias of the attribute, e.g., "{NAME~label}" would be replaced with
+"Station" in the format string if that were the alias for or name of the NAME attribute,
+while "value" will replace the whole brace field with a Flex-specific string representation
+of the value of the attribute.
+
+The other keywords are followed by a additional specifications enclosed within parentheses
+("()"):  "number" + specs will replace the whole brace field with the representation of a
+number; "currency" + specs will replace the whole brace field with the representation of a
+number preceded or followed by a currency symbol; "phone" + specs will replace the whole
+brace field with the representation of a telephone number, including international
+formatting; "date" + specs will replace the whole brace field with the representation of a
+date and/or time. These additional specifications, which are separated from each other by
+vertical bars ("|"), are converted to Flex Formatter options.
+
+Numbers are formatted using the ActionScript NumberFormatter class
+(http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/mx/formatters/NumberFormatter.html ),
+and use five additional specifications: sign, thousands separator, decimal separator,
+number of decimal places, and rounding. The specification for sign is "+" to not show a
+sign even for a negative number, "-" to show a negative sign for a negative number, and
+")" to use parentheses for a negative number. E.g., "{LONDD~number(+|,|.|3|nearest)}° W"
+for a longitude value of -111.933333 will become "111.933° W". The thousands separator
+is the character that separates groups of 1000; omit it for no separation. E.g., for an
+attribute PRICE with a value of a million, "{PRICE~number(-||.|0|none)}" is converted to
+"1000000" while "{PRICE~number(-|,|.|0|none)}" is converted to "1,000,000". The decimal
+separator is the character that separates the whole and fractional parts of a number; it
+must be different than the thousands separator. Rounding is specified using one of the
+keywords "down", "nearest", "up", or "none".
+
+Currencies are formatted using the ActionScript CurrencyFormatter class
+(http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/mx/formatters/CurrencyFormatter.html ).
+Their additional specifications are the same as for a number except that they add one
+more specification field at the beginning to hold the currency symbol. If this symbol
+is suffixed by a negative sign, the currency symbol is placed at the end of the number;
+otherwise, it is placed at the beginning of the number. E.g., for an attribute PRICE
+with a value of a million, "{PRICE~currency(€-|-|.|,|2|none)}" is converted to
+"1.000.000,00€", while "{PRICE~currency($|-|,|.|2|none)}" is converted to
+"$1,000,000.00". (Note that these examples also illustrate different thousands and
+decimal separators.)
+
+Phones are formatted using the ActionScript PhoneFormatter class
+(http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/mx/formatters/PhoneFormatter.html ),
+which permits characters from the set "+()#-. " to create the telephone number pattern.
+E.g., the field "{PHONE~phone(+1-###-###-####)}" will show the full international
+number for a US telephone number.
+
+Dates are formatted using the ActionScript DateFormatter class
+(http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/mx/formatters/DateFormatter.html#formatString ,
+formatString property documentation), which uses uppercase letters to represent
+parts of a date and time. Additional arbitrary lowercase text may be included in the
+pattern; see the above link for the full description. An example format field is
+"{SUBMITDT~date(M/D/YYYY K:NN A)}", which displays something like "7/7/1984 2:05 PM"
+depending on the date and time.
+
+Because braces are reserved for formatting, to include them, use their
+escaped equivalents:  %7B for '{' and %7D for '}'.
+-->
+<configuration>
+    <arcgis-viewer-note>See the MultilayerIdentifyWidget.xml file for formatting notes</arcgis-viewer-note>
+    <arcgis-viewer-note></arcgis-viewer-note>
+    <arcgis-viewer-note></arcgis-viewer-note>
+    <identifytolerance>5</identifytolerance>
+    <introduction>Use the cursor to identify features on the map</introduction>
+    <countdown>Map layers remaining: </countdown>
+    <nofeatures>No features were found</nofeatures>
+    <attachmentsTitle>Attachments</attachmentsTitle>
+    <validDomainList>localgovtemplates.esri.com,localgovtemplates2.esri.com</validDomainList>
+    <layers>
+        <!-- http://rmgsc.cr.usgs.gov/ArcGIS/rest/services/nhss_usdata/MapServer -->
+        <layer label="nhss usdata" type="dynamic">
+            <sublayer id="0">
+                <caption>Stream flow stations</caption>
+                <format><![CDATA[<b><u>{staname~value}</u></b> ({staid~value})<br />Located at {londd~number(+|,|.|3|nearest)}° N, {latdd~number(+|,|.|3|nearest)}° W<br />At {time~value}, its stage was {stage~value} ({class~value})<br />Costing  {londd~currency($|-|,|.|2|nearest)} & {latdd~currency(€|-|,|.|2|nearest)} & {londd~currency(¥|-|,|.|2|nearest)} & {latdd~currency(£-|)|,|.|2|nearest)}]]></format>
+            </sublayer>
+            <sublayer id="1">
+                <caption>Weather stations</caption>
+                <format><![CDATA[Weather station <b><u>{name~value}</u></b> ({nws_id~number(-|,|.|0|nearest)})<br />Located at {latitude~number(-|,|.|5|nearest)}° N, {longitude~number(-|,|.|5|nearest)}° W, {elev~number(-|,|.|0|nearest)} ft<br />in {county~value}, {state~value}<br />Managed by {agency~value} effective {eff_date~value}]]></format>
+            </sublayer>
+            <sublayer id="2">
+                <!-- Omitted caption uses layer's name -->
+                <format><![CDATA[<b>{unit_name~value}</b><br />{agency~value}<br /><a href="http://en.wikipedia.org/wiki/{state~value}" target="_blank"><font color="#ffffff">{state~value}</font></a>]]></format>
+            </sublayer>
+        </layer>
+        <!-- http://localgovtemplates2.esri.com/ArcGIS/rest/services/CitizenService/ServiceRequest/FeatureServer/0 -->
+        <layer label="Service Requests" type="feature">
+            <caption>Service requests</caption>
+            <format><![CDATA[<b><u>Service Request #{REQUESTID~value}</u></b><br />{REQUESTTYPE~label}: <b>{REQUESTTYPE~value}</b><br />{STATUS~label}: <b>{STATUS~value}</b><br />Issue reported by <i>{NAME~value}</i> on {REQUESTDATE~date(M/D/YYYY K:NN A)}<br />Contact information:<br /> ▪ Telephone: {PHONE~phone(+1-###-###-####)}<br /> ▪ Email: {EMAIL~value}<br />Comments: %7B{COMMENTS~value}%7D]]></format>
+            <relationship id="0">
+                <caption>Comments</caption>
+                <format><![CDATA[Submitted {SUBMITDT~date(M/D/YYYY JJNN)}<br />{COMMENTS~value}<br /><i>Importance: {RANK~value}</i>]]></format>
+            </relationship>
+        </layer>
+        <!-- http://localgovtemplates2.esri.com/ArcGIS/rest/services/PublicSafety/EmergencyOperations/MapServer/3 -->
+        <layer label="Evacuation Areas" type="feature">
+            <caption>Evacuation areas</caption>
+            <!-- Omitted format becomes attribute name-value pairs -->
+        </layer>
+    </layers>
+</configuration>

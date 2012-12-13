@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ | Version 10.1.1
+ | Copyright 2010 Esri
+ |
+ | Licensed under the Apache License, Version 2.0 (the "License");
+ | you may not use this file except in compliance with the License.
+ | You may obtain a copy of the License at
+ |
+ |    http://www.apache.org/licenses/LICENSE-2.0
+ |
+ | Unless required by applicable law or agreed to in writing, software
+ | distributed under the License is distributed on an "AS IS" BASIS,
+ | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ | See the License for the specific language governing permissions and
+ | limitations under the License.
+-->
+<viewer:BaseWidget xmlns:fx="http://ns.adobe.com/mxml/2009"
+				   xmlns:s="library://ns.adobe.com/flex/spark"
+				   xmlns:mx="library://ns.adobe.com/flex/mx"
+				   xmlns:esri="http://www.esri.com/2008/ags"
+				   xmlns:viewer="com.esri.viewer.*"
+				   xmlns:MultilayerIdentify="widgets.MultilayerIdentify.*"
+				   layout="absolute"
+				   widgetConfigLoaded="init()">
+
+    <fx:Declarations>
+        <esri:SimpleMarkerSymbol id="ptIdentify" style="circle" color="0xFF3333" size="10"/>
+    </fx:Declarations>
+	<fx:Script><![CDATA[
+        import com.esri.ags.events.DrawEvent;
+        import com.esri.ags.events.MapMouseEvent;
+        import com.esri.ags.geometry.MapPoint;
+        import com.esri.ags.tools.DrawTool;
+        import com.esri.ags.tools.NavigationTool;
+
+        import mx.collections.ArrayCollection;
+        import mx.events.FlexEvent;
+        import mx.events.StateChangeEvent;
+
+        private var _drawTool:DrawTool;
+        private var _identifyTolerance:Number = 5;
+        private var _listeningForMapClicks:Boolean = false;
+        private var _configFormats:Dictionary;
+        private var _identifyPoint:MapPoint;
+        private var _identifyArrayCollection:ArrayCollection;
+
+        private const ICON_URL:String = "assets/images/";
+        private var _introduction:String;
+        private var _countdown:String;
+        private var _nofeatures:String;
+
+        [Bindable]
+        private var _informationLabel:String;
+
+
+        // Prepares the widget by reading user text and formats for layers
+		private function init():void
+		{
+            // Initialize the user text in case we don't have a configuration file
+            _introduction = "Use the cursor to identify features on the map";
+            _countdown = "Map layers remaining: ";
+            _nofeatures = "No features were found";
+            var attachmentsTitle:String = "Attachments"
+
+            // Capture the complete configuration
+            _configFormats = new Dictionary();
+            if (configXML)
+			{
+				if(Number(configXML.identifytolerance) > 0)
+					_identifyTolerance = Number(configXML.identifytolerance);
+                if(null != configXML.introduction) _introduction = configXML.introduction;
+                if(null != configXML.countdown) _countdown = configXML.countdown;
+                if(null != configXML.nofeatures) _nofeatures = configXML.nofeatures;
+                if(null != configXML.attachmentsTitle) attachmentsTitle = configXML.attachmentsTitle;
+                if(null != configXML.validDomainList)
+                {
+					var validDomains:String = configXML.validDomainList;
+					if(null != validDomains && 0 < validDomains.length)
+					{
+                    	MultilayerIdentify.Instance.validDomains = validDomains.split(",");
+					}
+                }
+
+                // Cycle through all <layer> tags
+				var configLayers:XMLList = configXML..layer;
+                if(null != configLayers)
+                {
+    				for(var i:Number = 0; i < configLayers.length(); i++)
+    				{
+                        var configLayer:XML = configLayers[i];
+                        var layerLabel:String = configLayer.@label;
+                        var layerType:String = configLayer.@type;
+
+                        if("feature" == layerType)
+                        {
+                            var caption:String = configLayer.caption;
+                            var format:String = configLayer.format;
+                            if("" == format) format = "*";
+                            var layerFormat:Object =
+                            {
+                                caption: caption,
+                                format: format
+                            }
+                            _configFormats[layerLabel] = layerFormat;
+
+                            var layerRelationships:XMLList = configLayer..relationship;
+                            for(var j:Number = 0; j < layerRelationships.length(); ++j)
+                            {
+                                var relationship:XML = layerRelationships[j];
+                                var relationshipId:String = relationship.@id;
+
+                                var captionR:String = relationship.caption;
+                                var formatR:String = relationship.format;
+                                if("" == formatR) formatR = "*";
+                                var layerFormatR:Object =
+                                {
+                                    caption: captionR,
+                                    format: formatR
+                                }
+                                _configFormats[layerLabel + "\\" + relationshipId.toString()] =
+                                    layerFormatR;
+                            }
+                        }
+                        else if("dynamic" == layerType)
+                        {
+                            var sublayers:XMLList = configLayer..sublayer;
+                            for(var k:Number = 0; k < sublayers.length(); ++k)
+                            {
+                                var sublayer:XML = sublayers[k];
+                                var sublayerId:String = sublayer.@id;
+
+                                var captionS:String = sublayer.caption;
+                                var formatS:String = sublayer.format;
+                                if("" == formatS) formatS = "*";
+                                var layerFormatS:Object =
+                                    {
+                                        caption: captionS,
+                                        format: formatS
+                                    }
+                                _configFormats[layerLabel + "\\" + sublayerId.toString()] =
+                                    layerFormatS;
+                            }
+
+                        }
+
+
+    				}
+                }
+			}
+            _configFormats["__attachmentsTitle"] = attachmentsTitle;
+
+            // Start listening for clicks
+            _informationLabel = _introduction;
+            activateIdentifyTool();
+		}
+
+        // Sets the arrow pointer and starts listening for map clicks
+        private function activateIdentifyTool(event:Event = null):void
+        {
+            if(!_drawTool)
+            {
+                // Use the DrawTool to get the arrow pointer
+                _drawTool = new DrawTool();
+                _drawTool.map = map;
+                _drawTool.showDrawTips = false;
+                _drawTool.markerSymbol = ptIdentify;
+            }
+            _drawTool.activate(DrawTool.MAPPOINT);
+
+            // Let the map know that we're interested in map clicks
+            if(!_listeningForMapClicks)
+            {
+                map.addEventListener(com.esri.ags.events.MapMouseEvent.MAP_CLICK, mapClickHandler);
+                _listeningForMapClicks = true;
+            }
+        }
+
+        // Clears the last search results
+        private function clearResults():void
+        {
+            _identifyArrayCollection = null;
+            _identifyPoint = null;
+
+            MultilayerIdentify.Instance.clearCurrentSearch();
+            _informationLabel = _introduction;
+            infoDisplay.visible = true;
+        }
+
+        // Removes the arrow pointer and ceases to listen for map clicks
+        private function deactivateIdentifyTool(event:Event = null):void
+        {
+            _drawTool.deactivate();
+            setMapNavigation(NavigationTool.PAN, "Pan Map");
+
+            // Let the map know that we don't need map clicks
+            if(_listeningForMapClicks)
+            {
+                map.removeEventListener(com.esri.ags.events.MapMouseEvent.MAP_CLICK, mapClickHandler);
+                _listeningForMapClicks = false;
+            }
+        }
+
+        // Clears the last search results and closes the widget
+        private function closeIdentifyTool(event:Event = null):void
+        {
+            deactivateIdentifyTool();
+            clearResults();
+        }
+
+        // Responds to a user map click by launching a feature search
+        private function mapClickHandler(event:MapMouseEvent):void
+        {
+            content.viewport = MultilayerIdentify.Instance.launchNewSearch(
+                map, event.mapPoint, _identifyTolerance, _configFormats, reportLayersRemaining);
+        }
+
+        // Reports how many map layers remain to provide results for the current search
+        private function reportLayersRemaining(layersRemaining:int):void
+        {
+            if(0 < layersRemaining)
+            {
+                infoDisplay.visible = true;
+                _informationLabel = _countdown + layersRemaining.toString();
+            }
+            else
+            {
+                var finds:int = MultilayerIdentify.Instance.numberOfLayersWithResults;
+                if(0 < MultilayerIdentify.Instance.numberOfLayersWithResults)
+                {
+                    infoDisplay.visible = false;
+                    _informationLabel = "";
+                }
+                else
+                {
+                    infoDisplay.visible = true;
+                    _informationLabel = _nofeatures;
+                }
+            }
+        }
+    ]]></fx:Script>
+	<viewer:WidgetTemplate id="wTemplate"
+        open="activateIdentifyTool(event)"
+        minimized="deactivateIdentifyTool(event)"
+		closed="closeIdentifyTool(event)"
+		height="200" width="370">
+		<s:Group height="100%" width="100%" visible="true">
+			<s:layout>
+				<s:VerticalLayout gap="1" horizontalAlign="center"/>
+			</s:layout>
+			<mx:Text id="infoDisplay" text="{_informationLabel}" width="100%" textAlign="center"/>
+			<s:Scroller id="content" height="100%" width="100%">
+			</s:Scroller>
+		</s:Group>
+	</viewer:WidgetTemplate>
+</viewer:BaseWidget>

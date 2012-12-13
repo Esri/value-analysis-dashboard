@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ | Version 10.1.1
+ | Copyright 2012 Esri
+ |
+ | Licensed under the Apache License, Version 2.0 (the "License");
+ | you may not use this file except in compliance with the License.
+ | You may obtain a copy of the License at
+ |
+ |    http://www.apache.org/licenses/LICENSE-2.0
+ |
+ | Unless required by applicable law or agreed to in writing, software
+ | distributed under the License is distributed on an "AS IS" BASIS,
+ | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ | See the License for the specific language governing permissions and
+ | limitations under the License.
+-->
+<configuration>
+    <!--
+        Refer to the doc below for valid HTML tags that can be used for the content
+        http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flashx/textLayout/conversion/TextConverter.html#TEXT_FIELD_HTML_FORMAT
+    -->
+  <width>375</width>
+  <height>500</height>
+  - <content>
+    - <![CDATA[
+        	<p align='center'>
+
+            		<font size='16' color='#FFFFFF'><b>Value Analysis Dashboard</b></font>
+                <br>
+            		<img src='assets/images/i_home.png' width='40' height='40' />
+                <br>
+
+			</p>
+		     	<span style='MARGIN: 100px 100px 100px 100px'>
+        	<textformat rightMargin='25' leftMargin='100'>The Value Analysis Dashboard provides a high-level view into changes in property assessments and tax revenue in a local government.  It provides relevant base maps and operational layers from several business systems so map-centric content can be visualized and used to assess the impact of property sales, foreclosures, and assessment appeals on real estate value and tax revenue.<BR /><BR />Sales, foreclosures and assessment appeals can be added to the map.  Information about each of these property transactions can be viewed by clicking on the Assessment Information tool. In addition, sales and foreclosures transactions can also be viewed over time. <BR /><BR />Year over year changes in assessed value can be visualized on a parcel by parcel basis by clicking on the Property Value tool. <BR /><BR />Sample data provided by Bloomfield Township, Michigan.</textformat>
+            </span>
+       		<br>
+       		<textformat indent="25">
+	        	<p>
+
+	        		<a href="http://resources.arcgis.com/en/communities/local-government/01n40000000p000000.htm" target='_blank'><font color='#FFFF00'>Local Government Resource Center</font></a>
+	        		<br>
+	        		<a href="http://resources.arcgis.com/en/communities/flex-viewer/" target='_blank'><font color='#FFFF00'>ArcGIS Viewer for Flex</font></a>
+
+	        	</p>
+	        </textformat>
+        	<br>
+        	<p>
+        		(c) Copyright 2012 ESRI. All rights reserved.
+        	</p>
+        	<br>
+        	<br>]]>
+  </content>
+  <btnlabel>Enter Site</btnlabel>
+</configuration>
+
+<!--
+    See Splash widget tag reference at
+    http://links.esri.com/splashwidget
+-->
