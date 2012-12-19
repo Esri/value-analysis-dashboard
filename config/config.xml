@@ -65,7 +65,7 @@
         <layer label="Parcel Characteristics" type="feature" visible="true" alpha="0"
                 url="http://localgovtemplates.esri.com/ArcGIS/rest/services/AssessmentOperations/MapServer/3"/>
         <layer label="Feedback" type="feature" visible="true" alpha="0"
-                url="http://localgovtemplates.esri.com/ArcGIS/rest/services/ParcelMarkups/FeatureServer/0"/>
+                url="http://services.arcgis.com/b6gLrKHqgkQb393u/arcgis/rest/services/ParcelMarkupsTryitLive/FeatureServer/0"/>
       </operationallayers>
     </map>
 
