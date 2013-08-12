@@ -40,7 +40,7 @@ on the ArcGIS Resource Center can guide you in the setup and configuration of th
 
 * ArcGIS for Desktop 10.1 - Standard or Advanced - [About](http://www.esri.com/software/arcgis/arcgis-for-desktop)
 * ArcGIS for Server 10.1 - Standard or Advanced - [About](http://www.esri.com/software/arcgis/arcgisserver)
-* Local Government Information Model - [About](http://www.arcgis.com/home/item.html?id=5f799e6d23d94e25b5aaaf2a58e63fb1)
+* Local Government Information Model - [About](http://www.arcgis.com/home/item.html?id=ae175b36c4154dda987127dff879350d)
 * Microsoft ASP.NET Framework 4.0 available from the [Microsoft website](http://www.microsoft.com/en-us/download/details.aspx?id=17851)
 * Adobe Flash Player Plug-in - [About](http://get.adobe.com/flashplayer/)
 
@@ -64,7 +64,8 @@ Find a bug or want to request a new feature?  Please let us know by submitting a
 
 ## Contributing
 
-Anyone and everyone is welcome to contribute.
+Esri welcomes contributions from anyone and everyone.
+Please see our [guidelines for contributing](https://github.com/esri/contributing).
 
 ## Licensing
 
@@ -83,7 +84,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 A copy of the license is available in the repository's
-[license.txt](https://raw.github.com/Esri/value-analysis-dashboard/master/license.txt) file.
+[LICENSE.txt](https://raw.github.com/Esri/value-analysis-dashboard/master/LICENSE.txt) file.
 
 [](Esri Tags: Local-Government Local Government Value Analysis Dashboard)
 [](Esri Language: ActionScript)
