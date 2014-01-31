@@ -7,7 +7,7 @@ on a parcel by parcel basis or on a complete assessment neighborhood.
 
 [Try the Value Analysis Dashboard application](http://localgovtemplates.esri.com/ValueAnalysis/index.html)
 
-[![Image of Value Analysis Dashboard](https://raw.github.com/Esri/value-analysis-dashboard/master/value-analysis-dashboard.png "Value Analysis Dashboard")](http://localgovtemplates.esri.com/ValueAnalysis/index.html)
+[![Image of Value Analysis Dashboard](value-analysis-dashboard.png "Value Analysis Dashboard")](http://localgovtemplates.esri.com/ValueAnalysis/index.html)
 
 ## Features
 
@@ -84,7 +84,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 A copy of the license is available in the repository's
-[LICENSE.txt](https://raw.github.com/Esri/value-analysis-dashboard/master/LICENSE.txt) file.
+[LICENSE.txt](LICENSE.txt) file.
 
 [](Esri Tags: Local-Government Local Government Value Analysis Dashboard)
 [](Esri Language: ActionScript)
