@@ -1,13 +1,15 @@
 # value-analysis-dashboard
 
+***This value analysis dashboard repo functionality has been replaced by a configuration of the [Operations Dashboard](http://doc.arcgis.com/en/operations-dashboard/), applications built from this repo are in mature support.***
+
+***Check out the new [Value Analysis Dashboard](http://links.esri.com/localgovernment/help/10.2/valueanalysisdashboard) solution***
+
 The Value Analysis Dashboard application provides a high-level view into changes in property assessments and tax revenue
 in a local government. The Dashboard helps assessors, treasurers and other organizations in a local government analyze
 the impact of sales, foreclosures and assessment appeals on year-over-year property values. The impacts can be analyzed
 on a parcel by parcel basis or on a complete assessment neighborhood.
 
-[Try the Value Analysis Dashboard application](http://localgovtemplates.esri.com/ValueAnalysis/index.html)
-
-[![Image of Value Analysis Dashboard](value-analysis-dashboard.png "Value Analysis Dashboard")](http://localgovtemplates.esri.com/ValueAnalysis/index.html)
+[![Image of Value Analysis Dashboard](value-analysis-dashboard.png "Value Analysis Dashboard")]
 
 ## Features
 
@@ -16,15 +18,6 @@ Widgets
 * Property Value
 
 ## Instructions
-
-### Esri Sample Services
-
-Esri's sample services can be used with this repository to extend the application.
-
-### Your Services
-
-[Detailed help](http://resources.arcgis.com/en/help/localgovernment/10.1/index.html#/What_is_Value_Analysis_Dashboard/028s0000001s000000/)
-on the ArcGIS Resource Center can guide you in the setup and configuration of the app with your data.
 
 ### General Help
 [New to Github? Get started here.](http://htmlpreview.github.com/?https://github.com/Esri/esri.github.com/blob/master/help/esri-getting-to-know-github.html)
@@ -49,9 +42,6 @@ on the ArcGIS Resource Center can guide you in the setup and configuration of th
 Learn more about Esri's [ArcGIS for Local Government maps and apps](http://solutions.arcgis.com/local-government/).
 
 Show me a list of other [Local Government GitHub repositories](http://esri.github.io/#Local-Government).
-
-Additional [information and sample data](http://www.arcgis.com/home/item.html?id=906093a73a884cf4ba6272ecb18d722e)
-are available for the application.
 
 This application uses the 3.0 version of
 [Esri's ArcGIS API for Flex](http://resources.arcgis.com/en/communities/flex-api/)
